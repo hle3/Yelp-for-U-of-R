@@ -1,3 +1,7 @@
+Daniel Saltz
+Henry Le
+Jack Teitel
+
 # Yelp-for-U-of-R
 
 What is the project?

@@ -1,0 +1,48 @@
+
+<!--
+This page can only be accessed if the client's browser has a 'logged_in' sessionStorage key, created by signing in using a valid username and password
+-->
+
+<head>
+<title>Yelp For U of R</title>
+
+<!-- include jQuery, bootstrap, and MyStyles --> 
+<script src="jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="css/MyStyles.css">
+
+<script type="text/javascript">
+  // redirects page to login page if not logged in
+  if (!sessionStorage['logged_in']){
+    window.location = "/";
+  } 
+
+  $(document).ready(function() {
+
+    // writing hello message to screen
+    $("#hello").html("Hello, " + sessionStorage['logged_in']);
+
+    // putting in string on Sign out button
+    $("#signout").html("Sign out of " + sessionStorage['logged_in']);
+
+    // Sign out button functionality
+    $("#signout").click(function() {
+      sessionStorage.removeItem('logged_in');
+      window.location = "/";
+    });
+  });
+
+</script>
+
+</head>
+  <body>
+  <h1 id="title">Yelp for U of R</h1>
+
+  <h2 id="hello"></h2>
+
+  <p>This is where the web page will be displayed</p>
+
+  <button id="signout"></button>
+
+  </body>
+</html>

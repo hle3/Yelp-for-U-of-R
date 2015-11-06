@@ -1,0 +1,93 @@
+
+<!--
+This is the html that is displayed in the  web browser. It includes jQuery that interact with the html elements and sends items to the server using Ajax
+-->
+
+<head>
+<title>Yelp For U of R</title>
+
+<!-- include jQuery, bootstrap, and MyStyles --> 
+<script src="jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="css/MyStyles.css">
+
+<script type="text/javascript">
+
+  // redirects to yelp.html if already logged in
+  if (sessionStorage['logged_in']){
+    window.location = "yelp.html";
+  }
+
+$(document).ready(function() {
+  $(document).ajaxError(function() { // generic Ajax error handler
+    alert("Sorry, there was a problem!");
+  });
+
+  $("#login").click(function() { // when login button is clicked
+    $.ajax({
+      url: "/users/" + $("#usernameField").val(), // REST principles
+      type: "GET",
+      dataType: "text", 
+      data: { username: $("#usernameField").val(),
+              password: $("#passwordField").val(),
+             },
+      success: function(data) {
+
+        console.log("blah: "+data);
+
+        var lastChar = data[data.length-1]; 
+
+        if (lastChar == "Y"){
+          console.log("new page");
+          window.location = "yelp.html";
+          sessionStorage["logged_in"] = $("#usernameField").val();
+        } else {
+              // displaying all but the last char
+             $("#status").html(data.substring(0,data.length-1)); 
+        }
+      },
+    });
+  });
+
+  $("#createNewAccount").click(function() { // create new account button is clicked
+    $.ajax({
+      url: "/users",
+      type: "POST",
+      dataType : "text",
+      data : { username: $("#usernameField").val(),
+               password: $("#passwordField").val(),
+             },
+      success: function(data) {
+        var lastChar = data[data.length-1];
+        if (lastChar == "Y"){
+            // clearing the fields once the account is created
+            $("#passwordField").val("");
+            $("#usernameField").val("");    
+        } 
+      // displaying all but the last char
+      $("#status").html(data.substring(0,data.length-1)); 
+      },
+    });
+  });
+});
+</script>
+
+</head>
+  <body>
+  
+  <h1 id="title">Yelp for U of R</h1>
+
+    <p>
+    Username: <input id="usernameField" type="text" size="20"/>
+    Password: <input id="passwordField" type="password" size="20"/>
+    </p>
+
+    <p>
+    <button id="login">Login</button>
+    <button id="createNewAccount">Create New Account</button>
+    </p>
+
+    <hr/>
+    <div id="status"></div>
+  </body>
+</html>
